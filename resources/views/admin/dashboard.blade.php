@@ -4,103 +4,105 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Dashboard de Administración</h1>
-    <p class="text-muted">Desde aquí puedes gestionar los módulos principales de la tienda.</p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">Dashboard de Administración</h1>
+        <p class="text-muted">Administra tu tienda de manera eficiente.</p>
+    </div>
 
     <!-- Alertas de productos con bajo stock -->
     @if ($lowStockProducts->count() > 0)
-        <div class="alert alert-warning">
-            <h5 class="alert-heading">Productos con bajo stock:</h5>
-            <ul>
+        <div class="alert alert-warning shadow-sm">
+            <h5 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>Productos con bajo stock:</h5>
+            <ul class="mb-0">
                 @foreach ($lowStockProducts as $product)
-                    <li>{{ $product->name }} - Stock: {{ $product->stock }}</li>
+                    <li>{{ $product->name }} - Stock: <strong>{{ $product->stock }}</strong></li>
                 @endforeach
             </ul>
         </div>
     @else
-        <div class="alert alert-info">
-            <h5 class="alert-heading">No hay productos con bajo stock.</h5>
+        <div class="alert alert-info shadow-sm">
+            <h5 class="alert-heading"><i class="fas fa-info-circle me-2"></i>No hay productos con bajo stock.</h5>
         </div>
     @endif
 
     <!-- Tarjetas de estadísticas -->
-    <div class="row">
+    <div class="row g-4">
         <!-- Total de Productos -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card bg-primary text-white shadow">
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0 bg-primary text-white">
                 <div class="card-body">
-                    <h5>Total Productos</h5>
-                    <h2>{{ $totalProducts }}</h2>
+                    <h6>Total Productos</h6>
+                    <h2 class="fw-bold">{{ $totalProducts }}</h2>
                 </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a href="{{ route('admin.products.index') }}" class="small text-white stretched-link">Ver productos</a>
-                    <div class="small text-white"><i class="fas fa-arrow-right"></i></div>
+                <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
+                    <a href="{{ route('admin.products.index') }}" class="text-white text-decoration-none">Ver productos</a>
+                    <i class="fas fa-box fs-4"></i>
                 </div>
             </div>
         </div>
 
         <!-- Total de Categorías -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card bg-success text-white shadow">
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0 bg-success text-white">
                 <div class="card-body">
-                    <h5>Total Categorías</h5>
-                    <h2>{{ $totalCategories }}</h2>
+                    <h6>Total Categorías</h6>
+                    <h2 class="fw-bold">{{ $totalCategories }}</h2>
                 </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a href="{{ route('admin.categories.index') }}" class="small text-white stretched-link">Ver categorías</a>
-                    <div class="small text-white"><i class="fas fa-arrow-right"></i></div>
+                <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
+                    <a href="{{ route('admin.categories.index') }}" class="text-white text-decoration-none">Ver categorías</a>
+                    <i class="fas fa-tags fs-4"></i>
                 </div>
             </div>
         </div>
 
         <!-- Total de Órdenes -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card bg-warning text-white shadow">
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0 bg-warning text-white">
                 <div class="card-body">
-                    <h5>Total Órdenes</h5>
-                    <h2>{{ $totalOrders }}</h2>
+                    <h6>Total Órdenes</h6>
+                    <h2 class="fw-bold">{{ $totalOrders }}</h2>
                 </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a href="{{ route('admin.orders.index') }}" class="small text-white stretched-link">Ver órdenes</a>
-                    <div class="small text-white"><i class="fas fa-arrow-right"></i></div>
+                <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
+                    <a href="{{ route('admin.orders.index') }}" class="text-white text-decoration-none">Ver órdenes</a>
+                    <i class="fas fa-shopping-cart fs-4"></i>
                 </div>
             </div>
         </div>
 
         <!-- Total de Ingresos -->
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card bg-danger text-white shadow">
+        <div class="col-xl-3 col-md-6">
+            <div class="card shadow-sm border-0 bg-danger text-white">
                 <div class="card-body">
-                    <h5>Total Ingresos</h5>
-                    <h2>${{ number_format($totalRevenue, 2) }}</h2>
+                    <h6>Total Ingresos</h6>
+                    <h2 class="fw-bold">${{ number_format($totalRevenue, 2) }}</h2>
                 </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a href="{{ route('admin.orders.index') }}" class="small text-white stretched-link">Ver ingresos</a>
-                    <div class="small text-white"><i class="fas fa-arrow-right"></i></div>
+                <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
+                    <a href="{{ route('admin.orders.index') }}" class="text-white text-decoration-none">Ver ingresos</a>
+                    <i class="fas fa-dollar-sign fs-4"></i>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Predicción de categoría más vendida -->
-    <div class="row">
+    <div class="row g-4 mt-4">
         <div class="col-12">
-            <div class="card shadow">
-                <div class="card-header">
-                    <h5 class="mb-0">Predicción: Categoría más vendida la próxima semana</h5>
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Predicción: Categoría más vendida</h5>
                 </div>
                 <div class="card-body">
-                @if ($predictedCategory)
+                    @if ($predictedCategory)
                         <div class="d-flex align-items-center">
                             <div class="me-3">
                                 <h6 class="text-success">
-                                    Se espera que la categoría más vendida sea: <strong>{{ $predictedCategory->name }}</strong>
+                                    Categoría: <strong>{{ $predictedCategory->name }}</strong>
                                 </h6>
-                                <p>Probabilidad de éxito: <strong>{{ $predictedCategory->probability ?? 0 }}%</strong></p>
+                                <p>Probabilidad: <strong>{{ $predictedCategory->probability ?? 0 }}%</strong></p>
                             </div>
                             <div class="progress w-50">
                                 <div 
-                                    class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                                    class="progress-bar progress-bar-striped bg-success" 
                                     role="progressbar" 
                                     style="width: {{ $predictedCategory->probability ?? 0 }}%;" 
                                     aria-valuenow="{{ $predictedCategory->probability ?? 0 }}" 
@@ -112,30 +114,29 @@
                             </div>
                         </div>
                     @else
-                        <p class="text-muted">Aún no hay suficientes datos para realizar una predicción.</p>
+                        <p class="text-muted">No hay datos suficientes para realizar una predicción.</p>
                     @endif
-
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Ranking de productos más vendidos -->
-    <div class="row mt-4">
+    <div class="row g-4 mt-4">
         <div class="col-12">
-            <div class="card shadow">
-                <div class="card-header">
-                    <h5 class="mb-0">Ranking: Productos más vendidos</h5>
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Ranking: Productos más vendidos</h5>
                 </div>
                 <div class="card-body">
                     @if ($topSellingProducts->isNotEmpty())
-                        <table class="table table-striped">
-                            <thead>
+                        <table class="table table-hover">
+                            <thead class="table-light">
                                 <tr>
                                     <th>Posición</th>
                                     <th>Producto</th>
                                     <th>Categoría</th>
-                                    <th>Cantidad Vendida</th>
+                                    <th>Ventas</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -150,7 +151,7 @@
                             </tbody>
                         </table>
                     @else
-                        <p class="text-muted">No hay datos de ventas suficientes para mostrar el ranking.</p>
+                        <p class="text-muted">No hay datos suficientes para mostrar el ranking.</p>
                     @endif
                 </div>
             </div>
