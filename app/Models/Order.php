@@ -45,4 +45,11 @@ class Order extends Model
                     ->selectRaw('categories.id, categories.name, SUM(order_product.quantity) as total_sales')
                     ->groupBy('categories.id', 'categories.name');
     }
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'order_product')
+                    ->withPivot('quantity')
+                    ->withTimestamps();
+    }
+
 }

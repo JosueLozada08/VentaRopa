@@ -21,7 +21,7 @@ class DashboardController extends Controller
         if (Schema::hasColumn('orders', 'status')) {
             $totalRevenue = Order::where('status', 'completado')->sum('total');
 
-            // Categoría más vendida y probabilidad de ventas
+            // Predicción de la categoría más vendida
             $predictedCategory = Category::select('categories.id', 'categories.name')
                 ->join('products', 'categories.id', '=', 'products.category_id')
                 ->join('order_product', 'products.id', '=', 'order_product.product_id')
@@ -41,9 +41,26 @@ class DashboardController extends Controller
 
                 $predictedCategory->probability = round(($predictedCategory->total_sold / $totalSoldInPeriod) * 100, 2);
             }
+
+            // Ranking de productos más vendidos
+            $topSellingProducts = Product::select(
+                'products.name', 
+                'categories.name as category', 
+                \Illuminate\Support\Facades\DB::raw('SUM(order_product.quantity) as total_sold')
+            )
+            ->join('order_product', 'products.id', '=', 'order_product.product_id')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->where('orders.status', 'completado')
+            ->groupBy('products.id', 'categories.name')
+            ->orderByDesc('total_sold')
+            ->limit(5)
+            ->get();
+        
         } else {
             $totalRevenue = 0;
             $predictedCategory = null;
+            $topSellingProducts = collect();
         }
 
         // Productos con bajo stock
@@ -55,7 +72,8 @@ class DashboardController extends Controller
             'totalOrders',
             'totalRevenue',
             'lowStockProducts',
-            'predictedCategory'
+            'predictedCategory',
+            'topSellingProducts'
         ));
     }
 }

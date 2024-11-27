@@ -90,29 +90,67 @@
                     <h5 class="mb-0">Predicción: Categoría más vendida la próxima semana</h5>
                 </div>
                 <div class="card-body">
-                    @if ($predictedCategory)
+                @if ($predictedCategory)
                         <div class="d-flex align-items-center">
                             <div class="me-3">
                                 <h6 class="text-success">
-                                    Se espera que la categoría más vendida sea: <strong>{{ $predictedCategory['name'] }}</strong>
+                                    Se espera que la categoría más vendida sea: <strong>{{ $predictedCategory->name }}</strong>
                                 </h6>
-                                <p>Probabilidad de éxito: <strong>{{ $predictedCategory['probability'] }}%</strong></p>
+                                <p>Probabilidad de éxito: <strong>{{ $predictedCategory->probability ?? 0 }}%</strong></p>
                             </div>
                             <div class="progress w-50">
                                 <div 
                                     class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
                                     role="progressbar" 
-                                    style="width: {{ $predictedCategory['probability'] }}%;" 
-                                    aria-valuenow="{{ $predictedCategory['probability'] }}" 
+                                    style="width: {{ $predictedCategory->probability ?? 0 }}%;" 
+                                    aria-valuenow="{{ $predictedCategory->probability ?? 0 }}" 
                                     aria-valuemin="0" 
                                     aria-valuemax="100"
                                 >
-                                    {{ $predictedCategory['probability'] }}%
+                                    {{ $predictedCategory->probability ?? 0 }}%
                                 </div>
                             </div>
                         </div>
                     @else
                         <p class="text-muted">Aún no hay suficientes datos para realizar una predicción.</p>
+                    @endif
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ranking de productos más vendidos -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0">Ranking: Productos más vendidos</h5>
+                </div>
+                <div class="card-body">
+                    @if ($topSellingProducts->isNotEmpty())
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Posición</th>
+                                    <th>Producto</th>
+                                    <th>Categoría</th>
+                                    <th>Cantidad Vendida</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($topSellingProducts as $index => $product)
+                                    <tr>
+                                        <td>#{{ $index + 1 }}</td>
+                                        <td>{{ $product->name }}</td>
+                                        <td>{{ $product->category }}</td>
+                                        <td>{{ $product->total_sold }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <p class="text-muted">No hay datos de ventas suficientes para mostrar el ranking.</p>
                     @endif
                 </div>
             </div>
