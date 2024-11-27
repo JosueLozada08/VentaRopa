@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\CustomerController;
 
 // Ruta principal de bienvenida
 Route::get('/', function () {
@@ -19,7 +20,7 @@ Route::get('/', function () {
 
 // Rutas de autenticación para usuarios invitados
 Route::middleware('guest')->group(function () {
-    // Formulario de inicio de sesión y autenticación
+    // Formulario de inicio de sesión
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 
@@ -27,11 +28,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('/register', [RegisteredUserController::class, 'store']);
 
-    // Enlace para restablecer contraseña
+    // Restablecimiento de contraseña
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
-
-    // Establecer nueva contraseña
     Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 });
@@ -41,17 +40,20 @@ Route::middleware('auth')->group(function () {
     // Cerrar sesión
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-    // Dashboard para usuarios regulares
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Redirección al dashboard basado en roles
+    Route::get('/dashboard', function () {
+        if (auth()->user()->is_admin) {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('customer.dashboard');
+    })->name('dashboard');
 
     // Verificación de correo electrónico
-    Route::get('/email/verify', [VerifyEmailController::class, 'prompt'])
-        ->name('verification.notice');
+    Route::get('/email/verify', [VerifyEmailController::class, 'prompt'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, 'verify'])
         ->middleware(['signed'])
         ->name('verification.verify');
-    Route::post('/email/resend', [VerifyEmailController::class, 'sendVerificationEmail'])
-        ->name('verification.send');
+    Route::post('/email/resend', [VerifyEmailController::class, 'sendVerificationEmail'])->name('verification.send');
 });
 
 // Rutas para administradores autenticados
@@ -70,4 +72,21 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // Ruta para completar órdenes
     Route::put('orders/{order}/complete', [OrderController::class, 'complete'])->name('orders.complete');
+});
+
+// Rutas para clientes autenticados
+Route::prefix('customer')->name('customer.')->middleware(['auth', 'verified'])->group(function () {
+    // Dashboard del cliente
+    Route::get('/dashboard', [CustomerController::class, 'dashboard'])->name('dashboard');
+    
+    // Carrito de compras
+    Route::get('/cart', [CustomerController::class, 'cart'])->name('cart');
+    Route::post('/cart/{product}/add', [CustomerController::class, 'addToCart'])->name('cart.add');
+    Route::delete('/cart/{product}/remove', [CustomerController::class, 'removeFromCart'])->name('cart.remove');
+
+    // Confirmar pedido
+    Route::post('/confirm-order', [CustomerController::class, 'confirmOrder'])->name('confirmOrder');
+
+    // Comprar producto directamente
+    Route::post('/products/{product}/buy', [CustomerController::class, 'buy'])->name('products.buy');
 });

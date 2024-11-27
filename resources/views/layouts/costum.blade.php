@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Dashboard de Administración')</title>
+    <title>@yield('title', 'Tienda Ropa - Cliente')</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <!-- Logo y enlace al dashboard -->
-            <a class="navbar-brand" href="{{ route('admin.dashboard') }}">
+            <a class="navbar-brand" href="{{ route('customer.dashboard') }}">
                 <i class="fas fa-store"></i> Tienda Ropa
             </a>
             <button 
@@ -26,25 +25,18 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Navegación principal -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.products.index') }}">
+                        <a class="nav-link" href="{{ route('customer.dashboard') }}">
                             <i class="fas fa-box"></i> Productos
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.categories.index') }}">
-                            <i class="fas fa-tags"></i> Categorías
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.orders.index') }}">
-                            <i class="fas fa-shopping-cart"></i> Órdenes
+                        <a class="nav-link" href="{{ route('customer.cart') }}">
+                            <i class="fas fa-shopping-cart"></i> Carrito
                         </a>
                     </li>
                 </ul>
-                <!-- Perfil y cierre de sesión -->
                 <ul class="navbar-nav">
                     @auth
                         <li class="nav-item dropdown">
@@ -60,9 +52,9 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li>
-                                    <!-- Enlace al dashboard principal -->
+                                    <!-- Enlace al Dashboard del Usuario -->
                                     <a class="dropdown-item" href="{{ route('dashboard') }}">
-                                        <i class="fas fa-tachometer-alt"></i> Dashboard Principal
+                                        <i class="fas fa-tachometer-alt"></i> Dashboard
                                     </a>
                                 </li>
                                 <li>
@@ -94,8 +86,6 @@
                 {{ session('info') }}
             </div>
         @endif
-
-        <!-- Contenido dinámico -->
         @yield('content')
     </div>
 
