@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Order;
-use Illuminate\Support\Facades\Schema; // Importar Schema correctamente
+use Illuminate\Support\Facades\Schema;
 
 class DashboardController extends Controller
 {
@@ -42,11 +42,23 @@ class DashboardController extends Controller
                 ->mapWithKeys(function ($item) {
                     return [date('F', mktime(0, 0, 0, $item->month, 1)) => $item->total];
                 });
+
+            // Calcular la categoría más vendida
+            $predictedCategory = Category::select('categories.*')
+                ->join('products', 'categories.id', '=', 'products.category_id')
+                ->join('order_product', 'products.id', '=', 'order_product.product_id')
+                ->join('orders', 'order_product.order_id', '=', 'orders.id')
+                ->where('orders.status', 'completado')
+                ->whereBetween('orders.created_at', [now()->subDays(30), now()]) // Últimos 30 días
+                ->groupBy('categories.id')
+                ->orderByRaw('SUM(order_product.quantity) DESC')
+                ->first();
         } else {
             // Valores predeterminados si 'status' no existe
             $totalRevenue = 0;
             $currentYearRevenue = collect();
             $lastYearRevenue = collect();
+            $predictedCategory = null;
         }
 
         // Productos con bajo stock
@@ -60,7 +72,8 @@ class DashboardController extends Controller
             'totalRevenue',
             'currentYearRevenue',
             'lastYearRevenue',
-            'lowStockProducts'
+            'lowStockProducts',
+            'predictedCategory'
         ));
     }
 }

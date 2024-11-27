@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\PredictionController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\CustomerController;
 
@@ -72,6 +73,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // Ruta para completar órdenes
     Route::put('orders/{order}/complete', [OrderController::class, 'complete'])->name('orders.complete');
+    Route::get('/admin/predictions', [PredictionController::class, 'predictBestCategory'])->name('admin.predictions');
+
 });
 
 // Rutas para clientes autenticados

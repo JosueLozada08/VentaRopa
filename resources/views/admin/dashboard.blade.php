@@ -7,24 +7,21 @@
     <h1 class="mt-4">Dashboard de Administración</h1>
     <p class="text-muted">Desde aquí puedes gestionar los módulos principales de la tienda.</p>
 
-    <!-- Alerta de productos con bajo stock -->
-    <div class="alert alert-warning d-flex align-items-center" role="alert">
-        <div>
-            @if ($lowStockProducts->count() > 0)
-                <h5 class="alert-heading">¡Productos con bajo stock!</h5>
-                <ul>
-                    @foreach ($lowStockProducts as $product)
-                        <li>
-                            <strong>{{ $product->name }}</strong> - Stock: 
-                            <span class="badge bg-danger">{{ $product->stock }}</span>
-                        </li>
-                    @endforeach
-                </ul>
-            @else
-                <h5 class="alert-heading">Aún no se han registrado nuevos productos.</h5>
-            @endif
+    <!-- Alertas de productos con bajo stock -->
+    @if ($lowStockProducts->count() > 0)
+        <div class="alert alert-warning">
+            <h5 class="alert-heading">Productos con bajo stock:</h5>
+            <ul>
+                @foreach ($lowStockProducts as $product)
+                    <li>{{ $product->name }} - Stock: {{ $product->stock }}</li>
+                @endforeach
+            </ul>
         </div>
-    </div>
+    @else
+        <div class="alert alert-info">
+            <h5 class="alert-heading">No hay productos con bajo stock.</h5>
+        </div>
+    @endif
 
     <!-- Tarjetas de estadísticas -->
     <div class="row">
@@ -70,16 +67,36 @@
             </div>
         </div>
 
-        <!-- Total de Ventas -->
+        <!-- Total de Ingresos -->
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card bg-danger text-white shadow">
                 <div class="card-body">
-                    <h5>Total Ventas</h5>
+                    <h5>Total Ingresos</h5>
                     <h2>${{ number_format($totalRevenue, 2) }}</h2>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a href="{{ route('admin.orders.index') }}" class="small text-white stretched-link">Ver detalles</a>
+                    <a href="{{ route('admin.orders.index') }}" class="small text-white stretched-link">Ver ingresos</a>
                     <div class="small text-white"><i class="fas fa-arrow-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Predicción de categoría más vendida -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="mb-0">Predicción: Categoría más vendida la próxima semana</h5>
+                </div>
+                <div class="card-body">
+                    @if ($predictedCategory)
+                        <p class="text-success">
+                            Basándonos en las tendencias actuales, se espera que la categoría <strong>{{ $predictedCategory->name }}</strong> sea la más vendida la próxima semana.
+                        </p>
+                    @else
+                        <p class="text-muted">Aún no hay suficientes datos para realizar una predicción.</p>
+                    @endif
                 </div>
             </div>
         </div>
