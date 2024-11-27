@@ -3,63 +3,89 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Mostrar la lista de productos.
      */
     public function index()
     {
-        //
+        $products = Product::with('category')->get();
+
+        return view('admin.products.index', compact('products'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Mostrar el formulario para crear un nuevo producto.
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+
+        return view('admin.products.edit', compact('categories'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Almacenar un nuevo producto.
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'category_id' => 'required|exists:categories,id',
+            'stock' => 'required|integer|min:0',
+        ]);
+
+        Product::create($validated);
+
+        return redirect()->route('admin.products.index')
+            ->with('success', 'Producto creado correctamente.');
     }
 
     /**
-     * Display the specified resource.
+     * Mostrar el formulario para editar un producto.
      */
-    public function show(string $id)
+    public function edit(Product $product)
     {
-        //
+        $categories = Category::all();
+
+        return view('admin.products.edit', compact('product', 'categories'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Actualizar un producto.
      */
-    public function edit(string $id)
+    public function update(Request $request, Product $product)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'category_id' => 'required|exists:categories,id',
+            'stock' => 'required|integer|min:0',
+        ]);
+
+        $product->update($validated);
+
+        return redirect()->route('admin.products.index')
+            ->with('success', 'Producto actualizado correctamente.');
     }
 
     /**
-     * Update the specified resource in storage.
+     * Eliminar un producto.
      */
-    public function update(Request $request, string $id)
+    public function destroy(Product $product)
     {
-        //
-    }
+        $product->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('admin.products.index')
+            ->with('success', 'Producto eliminado correctamente.');
     }
 }
+ 

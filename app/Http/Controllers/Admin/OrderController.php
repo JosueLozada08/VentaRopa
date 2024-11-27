@@ -3,63 +3,40 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $orders = Order::with('user')->get(); // Relación con usuario
+        return view('admin.orders.index', compact('orders'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function complete(Order $order)
     {
-        //
+        if ($order->status !== 'pendiente') {
+            return redirect()->route('admin.orders.index')
+                ->with('error', 'Solo puedes completar órdenes pendientes.');
+        }
+
+        $order->update(['status' => 'completado']);
+
+        return redirect()->route('admin.orders.index')
+            ->with('success', 'Orden completada correctamente.');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function destroy(Order $order)
     {
-        //
-    }
+        if ($order->status === 'completado') {
+            return redirect()->route('admin.orders.index')
+                ->with('error', 'No puedes eliminar una orden completada.');
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $order->delete();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('admin.orders.index')
+            ->with('success', 'Orden eliminada correctamente.');
     }
 }
