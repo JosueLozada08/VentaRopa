@@ -91,9 +91,26 @@
                 </div>
                 <div class="card-body">
                     @if ($predictedCategory)
-                        <p class="text-success">
-                            Basándonos en las tendencias actuales, se espera que la categoría <strong>{{ $predictedCategory->name }}</strong> sea la más vendida la próxima semana.
-                        </p>
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <h6 class="text-success">
+                                    Se espera que la categoría más vendida sea: <strong>{{ $predictedCategory['name'] }}</strong>
+                                </h6>
+                                <p>Probabilidad de éxito: <strong>{{ $predictedCategory['probability'] }}%</strong></p>
+                            </div>
+                            <div class="progress w-50">
+                                <div 
+                                    class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                                    role="progressbar" 
+                                    style="width: {{ $predictedCategory['probability'] }}%;" 
+                                    aria-valuenow="{{ $predictedCategory['probability'] }}" 
+                                    aria-valuemin="0" 
+                                    aria-valuemax="100"
+                                >
+                                    {{ $predictedCategory['probability'] }}%
+                                </div>
+                            </div>
+                        </div>
                     @else
                         <p class="text-muted">Aún no hay suficientes datos para realizar una predicción.</p>
                     @endif
