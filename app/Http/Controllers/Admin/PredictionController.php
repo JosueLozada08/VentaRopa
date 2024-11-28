@@ -3,35 +3,55 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Order;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class PredictionController extends Controller
 {
-    public function predictBestCategory()
+    public function predictBestCategory(Request $request)
     {
-        // Obtener las ventas de los últimos 7 días
-        $lastWeekSales = Order::whereBetween('created_at', [
-                Carbon::now()->subDays(7),
-                Carbon::now()
-            ])
-            ->with('categories')
-            ->get()
-            ->flatMap(function ($order) {
-                return $order->categories;
-            });
+        // Obtener el número de días desde el parámetro o usar un valor predeterminado (7 días)
+        $days = $request->get('days', 7);
 
-        // Agrupar por categoría y calcular ventas totales
-        $salesByCategory = $lastWeekSales->groupBy('id')->map(function ($sales) {
-            return $sales->sum('total_sales');
-        });
+        // Validar que haya órdenes completadas en el rango de tiempo
+        $orders = Order::where('status', 'completado')
+            ->whereBetween('created_at', [now()->subDays($days), now()])
+            ->get();
 
-        // Predecir la categoría con más ventas
-        $bestCategory = $salesByCategory->sortDesc()->keys()->first();
+        if ($orders->isEmpty()) {
+            // Si no hay órdenes en este rango de tiempo
+            return view('admin.predictions.index', [
+                'bestCategoryName' => 'Sin datos',
+                'salesByCategory' => [],
+                'days' => $days,
+            ]);
+        }
 
-        // Información de la categoría
-        $bestCategoryName = $lastWeekSales->firstWhere('id', $bestCategory)->name ?? 'Sin datos';
+        // Obtener productos vendidos agrupados por categoría
+        $salesByCategory = Category::select('categories.id', 'categories.name')
+            ->join('products', 'categories.id', '=', 'products.category_id')
+            ->join('order_product', 'products.id', '=', 'order_product.product_id')
+            ->join('orders', 'order_product.order_id', '=', 'orders.id')
+            ->where('orders.status', 'completado')
+            ->whereBetween('orders.created_at', [now()->subDays($days), now()])
+            ->selectRaw('SUM(order_product.quantity) as total_sales')
+            ->groupBy('categories.id', 'categories.name')
+            ->orderByDesc('total_sales')
+            ->get();
 
-        return view('admin.predictions.index', compact('bestCategoryName', 'salesByCategory'));
+        if ($salesByCategory->isEmpty()) {
+            return view('admin.predictions.index', [
+                'bestCategoryName' => 'Sin datos',
+                'salesByCategory' => [],
+                'days' => $days,
+            ]);
+        }
+
+        // Categoría más vendida
+        $bestCategory = $salesByCategory->first();
+        $bestCategoryName = $bestCategory->name;
+
+        return view('admin.predictions.index', compact('bestCategoryName', 'salesByCategory', 'days'));
     }
 }

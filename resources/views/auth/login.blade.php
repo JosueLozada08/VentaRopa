@@ -5,11 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('Login') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+        }
+        .btn-primary {
+            background-color: #2575fc;
+            border-color: #2575fc;
+        }
+        .btn-primary:hover {
+            background-color: #1e63d3;
+            border-color: #1e63d3;
+        }
+        .form-label, .form-check-label {
+            color: #333;
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
-        <div class="card shadow-sm p-4" style="width: 100%; max-width: 400px;">
-            <h2 class="text-center mb-4">{{ __('Login') }}</h2>
+        <div class="card shadow p-4" style="width: 100%; max-width: 400px; background-color: #fff;">
+            <h2 class="text-center mb-4 text-primary">{{ __('Login') }}</h2>
 
             <!-- Session Status -->
             @if (session('status'))
@@ -56,7 +78,7 @@
                 <!-- Actions -->
                 <div class="d-flex justify-content-between align-items-center">
                     @if (Route::has('password.request'))
-                        <a class="text-decoration-none" href="{{ route('password.request') }}">
+                        <a class="text-decoration-none text-primary" href="{{ route('password.request') }}">
                             {{ __('Forgot your password?') }}
                         </a>
                     @endif

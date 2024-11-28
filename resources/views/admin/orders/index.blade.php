@@ -15,7 +15,7 @@
             <table class="table table-bordered table-hover">
                 <thead class="table-dark">
                     <tr>
-                        <th>ID</th>
+                        
                         <th>Cliente</th>
                         <th>Total</th>
                         <th>Estado</th>
@@ -26,7 +26,7 @@
                 <tbody>
                     @forelse ($orders as $order)
                         <tr>
-                            <td>{{ $order->id }}</td>
+                            
                             <td>{{ $order->user->name ?? 'Cliente desconocido' }}</td>
                             <td>${{ number_format($order->total, 2) }}</td>
                             <td>

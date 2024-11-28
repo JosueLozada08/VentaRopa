@@ -11,7 +11,8 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PredictionController;
-use App\Http\Controllers\Admin\ProductRankingController; // Añadir el controlador Ranking
+use App\Http\Controllers\Admin\ProductRankingController;
+use App\Http\Controllers\Admin\CategoryComparisonController;
 use App\Http\Controllers\CustomerController;
 
 // Ruta principal de bienvenida
@@ -52,11 +53,21 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('orders', OrderController::class);
+
+    // Ruta para marcar órdenes como completas
     Route::put('/orders/{order}/complete', [OrderController::class, 'complete'])->name('orders.complete');
-    Route::get('/predictions', [PredictionController::class, 'predictBestCategory'])->name('predictions');
+
+    // Ruta para predicción dinámica
+    Route::get('/predictions/{days?}', [PredictionController::class, 'predictBestCategory'])
+        ->where('days', '[0-9]+')
+        ->name('predictions');
 
     // Ranking de productos más vendidos
-    Route::get('/ranking', [ProductRankingController::class, 'index'])->name('ranking.index'); // Nueva ruta
+    Route::get('/ranking', [ProductRankingController::class, 'index'])->name('ranking');
+
+    // Comparar categorías
+    Route::get('/comparison', [CategoryComparisonController::class, 'index'])->name('categories.comparison');
+    Route::get('/comparison/compare', [CategoryComparisonController::class, 'compare'])->name('categories.compare');
 });
 
 // Rutas para clientes

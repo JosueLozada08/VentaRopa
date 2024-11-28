@@ -17,7 +17,7 @@ class ProductRankingController extends Controller
             ->groupBy('products.id', 'products.name', 'products.price')
             ->selectRaw('SUM(order_product.quantity) as total_quantity')
             ->orderByDesc('total_quantity') // Ordenar por cantidad vendida
-            ->take(10) // Top 10 productos más vendidos
+            ->take(5) // Top 10 productos más vendidos
             ->get();
 
         return view('admin.product-ranking.index', compact('topProducts'));

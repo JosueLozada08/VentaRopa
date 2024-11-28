@@ -8,7 +8,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>ID</th>
+            
             <th>Nombre</th>
             <th>Acciones</th>
         </tr>
@@ -16,7 +16,7 @@
     <tbody>
         @forelse ($categories as $category)
             <tr>
-                <td>{{ $category->id }}</td>
+                
                 <td>{{ $category->name }}</td>
                 <td>
                     <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Editar</a>
