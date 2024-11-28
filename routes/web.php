@@ -15,12 +15,12 @@ use App\Http\Controllers\Admin\ProductRankingController;
 use App\Http\Controllers\Admin\CategoryComparisonController;
 use App\Http\Controllers\CustomerController;
 
-// Ruta principal de bienvenida
+// Welcome route
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Rutas de autenticación para usuarios invitados
+// Authentication routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
@@ -32,7 +32,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 });
 
-// Rutas para usuarios autenticados
+// Authenticated user routes
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     Route::get('/dashboard', function () {
@@ -47,30 +47,30 @@ Route::middleware('auth')->group(function () {
     Route::post('/email/resend', [VerifyEmailController::class, 'sendVerificationEmail'])->name('verification.send');
 });
 
-// Rutas para administradores
+// Admin routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('orders', OrderController::class);
 
-    // Ruta para marcar órdenes como completas
+    // Orders completion
     Route::put('/orders/{order}/complete', [OrderController::class, 'complete'])->name('orders.complete');
 
-    // Ruta para predicción dinámica
+    // Predictions
     Route::get('/predictions/{days?}', [PredictionController::class, 'predictBestCategory'])
         ->where('days', '[0-9]+')
         ->name('predictions');
 
-    // Ranking de productos más vendidos
+    // Ranking
     Route::get('/ranking', [ProductRankingController::class, 'index'])->name('ranking');
 
-    // Comparar categorías
+    // Category comparison
     Route::get('/comparison', [CategoryComparisonController::class, 'index'])->name('categories.comparison');
     Route::get('/comparison/compare', [CategoryComparisonController::class, 'compare'])->name('categories.compare');
 });
 
-// Rutas para clientes
+// Customer routes
 Route::prefix('customer')->name('customer.')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [CustomerController::class, 'dashboard'])->name('dashboard');
     Route::get('/cart', [CustomerController::class, 'cart'])->name('cart');
