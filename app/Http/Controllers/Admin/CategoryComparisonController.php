@@ -49,19 +49,18 @@ class CategoryComparisonController extends Controller
         $categoryB = $this->getCategorySalesData($categoryBId);
 
         // Verificar si la categoría A existe y tiene datos de ventas
-    if (!$categoryA || !isset($categoryA->total_sold) || $categoryA->total_sold == 0) {
-        $categoryAName = $categoryA->name ?? 'desconocida';
-        return redirect()->route('admin.categories.comparison')
-            ->withErrors("La categoría '{$categoryAName}' no tiene datos de ventas y no se puede comparar.");
-    }
+        if (!$categoryA || !isset($categoryA->total_sold)) {
+            $categoryAName = Category::find($categoryAId)->name ?? 'desconocida';
+            return redirect()->route('admin.categories.comparison')
+                ->withErrors("Faltan datos en la categoría '{$categoryAName}', aún no se registran ventas.");
+        }
 
-    // Verificar si la categoría B existe y tiene datos de ventas
-    if (!$categoryB || !isset($categoryB->total_sold) || $categoryB->total_sold == 0) {
-        $categoryBName = $categoryB->name ?? 'desconocida';
-        return redirect()->route('admin.categories.comparison')
-            ->withErrors("La categoría '{$categoryBName}' no tiene datos de ventas y no se puede comparar.");
-    }
-
+        // Verificar si la categoría B existe y tiene datos de ventas
+        if (!$categoryB || !isset($categoryB->total_sold)) {
+            $categoryBName = Category::find($categoryBId)->name ?? 'desconocida';
+            return redirect()->route('admin.categories.comparison')
+                ->withErrors("Faltan datos en la categoría '{$categoryBName}', aún no se registran ventas.");
+        }
 
         // Calcular las ventas totales
         $totalA = $categoryA->total_sold;

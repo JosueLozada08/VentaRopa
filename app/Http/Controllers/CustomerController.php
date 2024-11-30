@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,10 +13,23 @@ class CustomerController extends Controller
     /**
      * Muestra el dashboard del cliente con productos disponibles.
      */
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        $products = Product::where('stock', '>', 0)->get(); // Solo productos con stock disponible
-        return view('costumer.dashboard', compact('products'));
+        // Consulta base de productos con stock mayor a 0
+        $query = Product::where('stock', '>', 0);
+
+        // Filtrar productos por categoría si se selecciona una
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+
+        // Paginación de productos
+        $products = $query->paginate(9);
+
+        // Obtener todas las categorías para el filtro
+        $categories = Category::all();
+
+        return view('costumer.dashboard', compact('products', 'categories'));
     }
 
     /**

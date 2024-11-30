@@ -6,6 +6,17 @@
 <div class="container-fluid px-4">
     <h1 class="fw-bold mb-4">Comparación de Categorías</h1>
 
+    <!-- Mostrar errores de validación -->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <!-- Categorías sin ventas -->
     @if (isset($categoriesWithoutSales) && $categoriesWithoutSales->isNotEmpty())
         <div class="alert alert-warning">

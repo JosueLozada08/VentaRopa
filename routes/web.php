@@ -72,10 +72,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
 // Customer routes
 Route::prefix('customer')->name('customer.')->middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [CustomerController::class, 'dashboard'])->name('dashboard');
-    Route::get('/cart', [CustomerController::class, 'cart'])->name('cart');
-    Route::post('/cart/{product}/add', [CustomerController::class, 'addToCart'])->name('cart.add');
-    Route::delete('/cart/{product}/remove', [CustomerController::class, 'removeFromCart'])->name('cart.remove');
-    Route::post('/confirm-order', [CustomerController::class, 'confirmOrder'])->name('confirmOrder');
-    Route::post('/products/{product}/buy', [CustomerController::class, 'buy'])->name('products.buy');
+    Route::get('/dashboard', [CustomerController::class, 'dashboard'])->name('dashboard'); // Dashboard con filtro de categorías
+    Route::get('/cart', [CustomerController::class, 'cart'])->name('cart'); // Ver carrito
+    Route::post('/cart/{product}/add', [CustomerController::class, 'addToCart'])->name('cart.add'); // Agregar producto al carrito
+    Route::delete('/cart/{product}/remove', [CustomerController::class, 'removeFromCart'])->name('cart.remove'); // Eliminar producto del carrito
+    Route::post('/confirm-order', [CustomerController::class, 'confirmOrder'])->name('confirmOrder'); // Confirmar pedido
 });

@@ -5,16 +5,38 @@
 @section('content')
     <div class="container mt-4">
         <h1 class="mb-4">Productos Disponibles</h1>
+
+        <!-- Alertas -->
         @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>
         @endif
 
+        <!-- Filtro por categoría -->
+        <div class="mb-4">
+            <form method="GET" action="{{ route('customer.dashboard') }}" class="row g-3">
+                <div class="col-md-4">
+                    <select name="category" class="form-select" onchange="this.form.submit()">
+                        <option value="">Todas las categorías</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Lista de productos -->
         <div class="row">
             @forelse ($products as $product)
                 <div class="col-md-4 mb-3">
-                    <div class="card">
+                    <div class="card h-100">
                         <div class="card-body">
                             <h5 class="card-title">{{ $product->name }}</h5>
                             <p class="card-text">{{ $product->description }}</p>
@@ -35,5 +57,12 @@
                 <p class="text-center">No hay productos disponibles en este momento.</p>
             @endforelse
         </div>
+
+        <!-- Paginación -->
+        @if ($products->hasPages())
+            <div class="d-flex justify-content-center mt-4">
+                {{ $products->links('pagination::bootstrap-4') }}
+            </div>
+        @endif
     </div>
 @endsection
