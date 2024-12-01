@@ -25,7 +25,7 @@ class DashboardController extends Controller
         $totalCategories = Category::count();
         $totalOrders = Order::count();
 
-        // Obtener el número de días del request (predeterminado 30 días)
+        // Obtener el número de días del request 
         $days = (int) $request->get('days', 30);
 
         // Validar si existe el campo 'status' en la tabla orders

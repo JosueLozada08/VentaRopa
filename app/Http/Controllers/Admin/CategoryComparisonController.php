@@ -24,11 +24,29 @@ class CategoryComparisonController extends Controller
             ->where('orders.status', 'completado')
             ->selectRaw('categories.id, categories.name, COALESCE(SUM(order_product.quantity), 0) as total_sold')
             ->groupBy('categories.id', 'categories.name')
-            ->havingRaw('total_sold = 0')
+            ->havingRaw('total_sold = 0')//identifica las categorias sin venta 
             ->get();
 
         return view('admin.comparison.index', compact('categories', 'categoriesWithoutSales'));
     }
+
+     /**
+     * Obtiene los datos de ventas de una categoría.
+     */
+
+     //el metodo encapsula la logica para obtener los datos de venta 
+     private function getCategorySalesData($categoryId)
+     {
+         return Category::select('categories.id', 'categories.name')
+             ->join('products', 'categories.id', '=', 'products.category_id')
+             ->join('order_product', 'products.id', '=', 'order_product.product_id')
+             ->join('orders', 'order_product.order_id', '=', 'orders.id')
+             ->where('orders.status', 'completado')
+             ->where('categories.id', $categoryId)
+             ->selectRaw('SUM(order_product.quantity) as total_sold')
+             ->groupBy('categories.id', 'categories.name')
+             ->first();
+     }
 
     /**
      * Compara dos categorías y muestra los resultados.
@@ -83,19 +101,5 @@ class CategoryComparisonController extends Controller
             ->with('categories', Category::all());
     }
 
-    /**
-     * Obtiene los datos de ventas de una categoría.
-     */
-    private function getCategorySalesData($categoryId)
-    {
-        return Category::select('categories.id', 'categories.name')
-            ->join('products', 'categories.id', '=', 'products.category_id')
-            ->join('order_product', 'products.id', '=', 'order_product.product_id')
-            ->join('orders', 'order_product.order_id', '=', 'orders.id')
-            ->where('orders.status', 'completado')
-            ->where('categories.id', $categoryId)
-            ->selectRaw('SUM(order_product.quantity) as total_sold')
-            ->groupBy('categories.id', 'categories.name')
-            ->first();
-    }
+   
 }
