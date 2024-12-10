@@ -52,12 +52,17 @@
                             <i class="fas fa-shopping-cart"></i> Órdenes
                         </a>
                     </li>
+                    </li>
                     <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.categories.comparison') ? 'active' : '' }}" href="{{ route('admin.categories.comparison') }}">
                         <i class="fas fa-chart-bar"></i> Comparar Categorías
                     </a>
                     </li>
-
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.categories.analysis') ? 'active' : '' }}" href="{{ route('admin.categories.analysis') }}">
+                            <i class="fas fa-calendar-alt"></i> Comparación por Fechas
+                        </a>
+                    </li>
                 </ul>
                 <!-- Perfil y cierre de sesión -->
                 <ul class="navbar-nav">
