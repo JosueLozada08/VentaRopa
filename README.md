@@ -1,59 +1,65 @@
-# Tienda Ropa - Sistema de Gestión y Predicción de Ventas
+# Tienda Ropa - Sistema Integral de Gestión y Análisis de Ventas
 
-Este proyecto es una aplicación web diseñada para gestionar la venta de ropa, incluyendo administración de productos, categorías, órdenes y análisis de ventas. Además, incluye funcionalidades avanzadas como predicción de la categoría más vendida y un ranking de productos más populares.
+Este proyecto es una aplicación web para gestionar la venta de ropa, optimizada con funcionalidades avanzadas de análisis y predicción de ventas. Proporciona herramientas para administrar productos, categorías, y órdenes, mientras permite análisis como rankings y comparaciones por categorías y fechas.
 
-## Características Principales
+---
 
-### Administración
-- **Gestión de Productos**: Crear, editar, eliminar y listar productos con detalles como precio, stock y categoría.
-- **Gestión de Categorías**: Crear, editar y listar categorías.
-- **Gestión de Órdenes**: Ver y administrar las órdenes generadas por los clientes, incluyendo detalles de productos comprados.
-- **Predicción de Ventas**: Predice la categoría con mayor probabilidad de ser la más vendida la próxima semana.
-- **Ranking de Productos Más Vendidos**: Muestra un ranking de los productos más vendidos con sus cantidades.
+## **Características Principales**
 
-### Cliente
-- **Catálogo de Productos**: Los clientes pueden navegar y ver los productos disponibles junto con su stock.
-- **Carrito de Compras**: Agregar productos al carrito y gestionar pedidos.
-- **Confirmación de Órdenes**: Realizar compras directamente desde el carrito de compras.
+### **Administración**
+- **Gestión de Productos**:
+  - Crear, editar, eliminar y listar productos.
+  - Atributos: nombre, precio, stock, descripción y categoría asignada.
+- **Gestión de Categorías**:
+  - Crear, editar, eliminar y listar categorías.
+- **Gestión de Órdenes**:
+  - Visualización y administración de órdenes.
+  - Estado de órdenes (completado, pendiente, etc.).
+- **Predicción de Ventas**:
+  - Predice la categoría con mayor probabilidad de ser la más vendida en un rango de días configurable.
+- **Ranking de Productos Más Vendidos**:
+  - Lista los 5 productos más vendidos con cantidades totales.
+- **Comparación por Categorías**:
+  - Compara el rendimiento de dos categorías en términos de ventas y productos vendidos.
+- **Comparación por Fechas**:
+  - Analiza las ventas de categorías en un rango de fechas específico.
 
-## Requisitos Previos
+### **Cliente**
+- **Catálogo de Productos**:
+  - Navegación del catálogo de productos con detalles como precio y stock.
+- **Carrito de Compras**:
+  - Gestión del carrito con la posibilidad de agregar, eliminar productos y confirmar compras.
+- **Confirmación de Órdenes**:
+  - Finaliza pedidos desde el carrito con la lista de productos seleccionados.
 
-Antes de ejecutar este proyecto, asegúrate de tener instalado lo siguiente:
+---
 
-- PHP >= 8.1
-- Composer
-- Laravel >= 11
-- MySQL (o cualquier base de datos compatible con Laravel)
-- Node.js y npm (opcional, para manejar frontend si se usa)
-- Un servidor local como Laragon, XAMPP, o similar.
-## Estructura del Proyecto
+## **Requisitos del Sistema**
 
-- **`app/Http/Controllers`**: Contiene los controladores para la administración (`Admin`) y clientes (`Customer`).
-- **`app/Models`**: Define los modelos como `Product`, `Category`, `Order`, y `OrderProduct`.
-- **`resources/views`**: Carpeta con las vistas de Blade para el frontend.
-  - **`admin/`**: Vistas del dashboard de administración.
-  - **`customer/`**: Vistas para el cliente.
-- **`routes/web.php`**: Archivo de rutas que define todas las URLs disponibles en la aplicación.
+Asegúrate de contar con los siguientes requisitos previos antes de instalar el proyecto:
 
-## Funcionalidades Avanzadas
+- **PHP**: >= 8.1
+- **Composer**
+- **Laravel**: >= 11
+- **Base de Datos**: MySQL o compatible con Laravel.
+- **Node.js y npm** (opcional, si deseas compilar assets frontend).
+- **Servidor Local**: Laragon, XAMPP, WAMP o cualquier entorno de desarrollo compatible.
 
-### Predicción de Categoría Más Vendida
-La predicción utiliza los datos de ventas de los últimos 30 días para determinar la categoría con mayor probabilidad de ser la más vendida en la próxima semana. La probabilidad se muestra como un porcentaje en el dashboard de administración.
+---
 
-### Ranking de Productos Más Vendidos
-Muestra los 5 productos más vendidos basándose en la cantidad total comprada en órdenes completadas.
+## **Instalación**
 
-## Uso del Sistema
+Sigue estos pasos para instalar el proyecto localmente:
 
-### Administración
-1. Inicia sesión como administrador usando un correo configurado como administrador.
-2. Gestiona productos, categorías, y órdenes desde el dashboard.
-3. Consulta el ranking de productos más vendidos y la predicción de ventas para tomar decisiones informadas.
-
-### Cliente
-1. Regístrate como cliente o usa una cuenta existente.
-2. Explora los productos disponibles.
-3. Agrega productos al carrito y realiza pedidos.
+1. **Clonar el repositorio**:
+   ```bash
+   git clone https://github.com/tu-repositorio/tienda-ropa.git
+   cd tienda-ropa
+1. **Clonar el repositorio**:
+   ```bash
+   composer install
+   npm install
+   npm run dev
 
 
 
