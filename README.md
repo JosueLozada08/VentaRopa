@@ -45,7 +45,7 @@ Asegúrate de contar con los siguientes requisitos previos antes de instalar el 
 - **Node.js y npm** (opcional, si deseas compilar assets frontend).
 - **Servidor Local**: Laragon, XAMPP, WAMP o cualquier entorno de desarrollo compatible.
 
----
+
 
 ## **Instalación**
 
