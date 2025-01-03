@@ -64,6 +64,8 @@
                         </a>
                     </li>
                 </ul>
+
+                <!-- nuevos cambios -->
                 <!-- Perfil y cierre de sesión -->
                 <ul class="navbar-nav">
                     @auth
