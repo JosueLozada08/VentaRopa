@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Contracts\NotificationService;
+use App\Services\SmsNotificationService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(NotificationService::class, SmsNotificationService::class);
     }
 
     /**
@@ -21,4 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+
+
+    
 }

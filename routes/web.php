@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\ProductRankingController;
 use App\Http\Controllers\Admin\CategoryComparisonController;
 use App\Http\Controllers\Admin\CategoryAnalysisController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\NotificationController; // Nueva importación para el controlador de notificaciones
 
 // Rutas Públicas (Página de Bienvenida)
 Route::get('/', function () {
@@ -48,6 +49,9 @@ Route::middleware('auth')->group(function () {
         ->middleware(['signed'])
         ->name('verification.verify');
     Route::post('/email/resend', [VerifyEmailController::class, 'sendVerificationEmail'])->name('verification.send');
+
+    // Nueva ruta: Enviar notificaciones
+    Route::post('/notifications/send', [NotificationController::class, 'sendNotification'])->name('notifications.send');
 });
 
 // Rutas de Administrador
